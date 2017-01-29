@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     TodoListDb todoDb;
 
@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button submitButton = (Button) findViewById(R.id.form_add_submit);
         submitButton.setOnClickListener(  this  );
 
+        //Selected item
+        taskList.setOnItemClickListener( this );
 
     }
 
@@ -90,6 +92,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void hideSoftKeyboard(){
         InputMethodManager inputManager = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Cursor cursor = todoDb.fetchById( id );
+        cursor.moveToFirst();
+
+        String title = cursor.getString( 1 );
+
+        TextView label = (TextView) findViewById(R.id.selected_task);
+        label.setText(title);
+
     }
 
 }

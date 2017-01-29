@@ -51,19 +51,39 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/selected_task"
+    <LinearLayout
+        android:layout_marginTop="@dimen/block_padding"
+        android:layout_marginBottom="@dimen/block_padding"
 
         android:padding="@dimen/block_padding"
         android:background="@color/lightColor"
 
-        android:layout_marginTop="@dimen/block_padding"
-        android:layout_marginBottom="@dimen/block_padding"
-
-        android:text="@string/no_selected_task"
-
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_task"
+            android:id="@+id/delete_task"
+            />
+
+        <TextView
+            android:id="@+id/selected_task"
+
+            android:text="@string/no_selected_task"
+            android:paddingLeft="@dimen/block_padding"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+    </LinearLayout>
+
+
+
 
     <ListView
         android:id="@+id/task_list"

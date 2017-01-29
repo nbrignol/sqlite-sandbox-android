@@ -18,6 +18,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     TodoListDb todoDb;
+    long selectedTaskId=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,18 +32,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Cursor results = todoDb.fetchAll();
         Log.d("DB", "Nombre de résultats : " + results.getCount() );
 
-        //adapt Cursor (from Sqlite) to ListView
-        SimpleCursorAdapter adapter = makeAdapter( results );
-
-        ListView taskList = (ListView) findViewById(R.id.task_list);
-        taskList.setAdapter(  adapter  );
+        //ListView & cursor
+        refreshListView();
 
         //Form "add task" submit
         Button submitButton = (Button) findViewById(R.id.form_add_submit);
         submitButton.setOnClickListener(  this  );
 
         //Selected item
+        ListView taskList = (ListView) findViewById(R.id.task_list);
         taskList.setOnItemClickListener( this );
+
+        //delete task
+        Button deleteButton = (Button) findViewById(R.id.delete_task);
+        deleteButton.setOnClickListener(  this  );
+        deleteButton.setEnabled(false);
+
 
     }
 
@@ -66,6 +71,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
+        if (v.getId() == R.id.form_add_submit) {
+            makeNewTask();
+            return;
+        }
+
+        if (v.getId() == R.id.delete_task) {
+            deleteSelectedTask();
+            return;
+        }
+
+    }
+
+    public void makeNewTask (){
         //save new task ...
         EditText titleInput =   (EditText) findViewById( R.id.form_add_title_field );
         EditText contentInput = (EditText) findViewById( R.id.form_add_content_field );
@@ -76,17 +94,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         todoDb.addTask( taskToAdd );
 
-        //refresh list ...
-        Cursor cursor = todoDb.fetchAll();
-
-        ListView myList = (ListView) findViewById(R.id.task_list);
-        myList.setAdapter( makeAdapter(cursor) );
-
         //clean UI ...
+        refreshListView();
         titleInput.setText("");
         contentInput.setText("");
 
         hideSoftKeyboard();
+    }
+
+    public void refreshListView(){
+        Cursor cursor = todoDb.fetchAll();
+
+        ListView myList = (ListView) findViewById(R.id.task_list);
+        myList.setAdapter( makeAdapter(cursor) );
+    }
+
+    public void deleteSelectedTask(){
+
+        if (selectedTaskId == 0) {
+            return;
+        }
+
+        todoDb.deleteTask(selectedTaskId);
+
+        //reset
+        selectedTaskId = 0;
+        Button deleteButton = (Button) findViewById(R.id.delete_task);
+        deleteButton.setEnabled(false);
+
+        TextView label = (TextView) findViewById(R.id.selected_task);
+        label.setText(R.string.no_selected_task);
+
+        refreshListView();
     }
 
     public void hideSoftKeyboard(){
@@ -96,6 +135,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        selectedTaskId = id;
+        Button deleteButton = (Button) findViewById(R.id.delete_task);
+        deleteButton.setEnabled(true);
 
         Cursor cursor = todoDb.fetchById( id );
         cursor.moveToFirst();

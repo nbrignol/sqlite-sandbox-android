@@ -68,7 +68,7 @@ public class TodoListDb extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor fetchById(long id) {
+    public Cursor fetchById(long taskId) {
 
         String table = "Task";
 
@@ -81,7 +81,7 @@ public class TodoListDb extends SQLiteOpenHelper {
         String whereClause =  "_id = ?";
 
         String[] whereArgs = new String[] {
-                String.valueOf(id)
+                String.valueOf(taskId)
         };
 
         Cursor cursor = this.getReadableDatabase().query(table, cols,
@@ -90,4 +90,22 @@ public class TodoListDb extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public void deleteTask(long taskId) {
+
+        String table = "Task";
+
+        String[] cols = new String[] {
+                "_id",
+                "title",
+                "content"
+        };
+
+        String whereClause =  "_id = ?";
+
+        String[] whereArgs = new String[] {
+                String.valueOf(taskId)
+        };
+
+        this.getWritableDatabase().delete(table, whereClause, whereArgs);
+    }
 }

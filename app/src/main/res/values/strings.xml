@@ -5,4 +5,5 @@
     <string name="form_add_content_field">Contenu</string>
     <string name="form_add_submit">Ajouter la tache</string>
     <string name="no_selected_task">Aucune tache selectionné.</string>
+    <string name="delete_task">Delete</string>
 </resources>

@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         deleteButton.setOnClickListener(  this  );
         deleteButton.setEnabled(false);
 
+        //toggle
+        Button toggleButton = (Button) findViewById(R.id.form_toggle);
+        toggleButton.setOnClickListener(  this  );
 
     }
 
@@ -81,6 +84,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        if (v.getId() == R.id.form_toggle) {
+            showFormAdd();
+            return;
+        }
+
     }
 
     public void makeNewTask (){
@@ -100,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         contentInput.setText("");
 
         hideSoftKeyboard();
+
+        hideFormAdd();
     }
 
     public void refreshListView(){
@@ -126,6 +136,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         label.setText(R.string.no_selected_task);
 
         refreshListView();
+    }
+
+    public void showFormAdd(){
+        View toggleButton = findViewById(R.id.form_toggle);
+        View formLayout = findViewById(R.id.form_add);
+
+        toggleButton.setVisibility(View.GONE);
+        formLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void hideFormAdd(){
+        View toggleButton = findViewById(R.id.form_toggle);
+        View formLayout = findViewById(R.id.form_add);
+
+        toggleButton.setVisibility(View.VISIBLE);
+        formLayout.setVisibility(View.GONE);
     }
 
     public void hideSoftKeyboard(){

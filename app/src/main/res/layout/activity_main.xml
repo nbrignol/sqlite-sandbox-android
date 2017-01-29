@@ -14,12 +14,21 @@
 
     tools:context="fr.nbrignol.todolist.MainActivity">
 
+    <Button
+        android:id="@+id/form_toggle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/form_toggle"
+        />
+
     <LinearLayout
 
         android:id="@+id/form_add"
         android:orientation="vertical"
         android:padding="@dimen/block_padding"
         android:background="@color/lightColor"
+
+        android:visibility="gone"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
